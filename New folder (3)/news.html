@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>News App</title>
+    <link rel="stylesheet" href="news.css" />
+  </head>
+  <body>
+    <!-- Dark Mode Toggle -->
+    <button id="dark-toggle" class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
+
+    <!-- Sidebar for sections -->
+    <div class="sidebar">
+      <ul>
+        <li><a href="#" data-content="about">About Us</a></li>
+        <li><a href="#" data-content="goals">Our Goals</a></li>
+        <li><a href="#" data-content="services">Our Services</a></li>
+      </ul>
+    </div>
+
+    <!-- Overlay for full-page content -->
+    <div id="overlay" class="overlay hidden">
+      <button id="overlay-close" class="overlay-close">✖</button>
+      <div id="overlay-content" class="overlay-content"></div>
+    </div>
+
+    <div class="main-container">
+      <nav>
+        <div class="main-nav container flex">
+          <a href="#" onclick="reload()" class="company-logo" aria-label="Reload Home">
+            <img src="https://images-platform.99static.com//PIHTkPGUZ1-bCjgYlG6L8I3najU=/430x452:1582x1604/fit-in/500x500/99designs-contests-attachments/121/121109/attachment_121109329" alt="company logo" />
+          </a>
+
+          <div class="nav-links">
+            <ul class="flex">
+              <li class="hover-link nav-item" id="ipl" onclick="onNavItemClick('ipl')">IPL</li>
+              <li class="hover-link nav-item" id="finance" onclick="onNavItemClick('finance')">Finance</li>
+              <li class="hover-link nav-item" id="politics" onclick="onNavItemClick('politics')">Politics</li>
+              <li class="hover-link nav-item" id="saved-link" onclick="showSavedSection()">Saved</li>
+            </ul>
+          </div>
+
+          <div class="search-bar flex">
+            <input
+              id="search-text"
+              type="text"
+              class="news-input"
+              placeholder="e.g. Science"
+              aria-label="Search news"
+            />
+            <div id="suggestions" class="suggestions"></div>
+            <button id="search-button" class="search-button">Search</button>
+          </div>
+        </div>
+      </nav>
+
+      <main>
+        <!-- Loader -->
+        <div id="loader" class="loader hidden" role="status" aria-live="polite" aria-label="Loading"></div>
+
+        <!-- Toast -->
+        <div id="toast" class="toast hidden" role="alert">No results found!</div>
+
+        <!-- News Cards -->
+        <section id="news-section">
+          <div class="cards-container container" id="cards-container"></div>
+        </section>
+
+        <!-- Saved News Section -->
+        <section id="saved-section" class="hidden">
+          <div class="container saved-header">
+            <h2>📌 Saved News</h2>
+            <div class="saved-actions">
+              <button id="clear-saved" class="clear-saved">Clear All</button>
+              <button id="back-to-news" class="clear-saved alt">Back to News</button>
+            </div>
+          </div>
+          <div id="saved-container" class="cards-container container"></div>
+        </section>
+      </main>
+
+      <!-- Back to Top -->
+      <button id="back-to-top" class="back-to-top hidden" aria-label="Back to top">⬆</button>
+
+      <!-- Templates -->
+      <template id="template-news-card">
+        <div class="card">
+          <div class="card-header">
+            <img src="https://via.placeholder.com/400x200" alt="news-image" id="news-img" />
+          </div>
+          <div class="card-content">
+            <h3 id="news-title">This is the Title</h3>
+            <h6 class="news-source" id="news-source">Source · Date</h6>
+            <p class="news-desc" id="news-desc">Description</p>
+            <div class="card-actions">
+              <button class="bookmark-btn" data-action="save">🔖 Read Later</button>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <template id="template-saved-card">
+        <div class="card">
+          <div class="card-header">
+            <img src="https://via.placeholder.com/400x200" alt="news-image" id="news-img" />
+          </div>
+          <div class="card-content">
+            <h3 id="news-title">Saved Title</h3>
+            <h6 class="news-source" id="news-source">Source · Date</h6>
+            <p class="news-desc" id="news-desc">Description</p>
+            <div class="card-actions">
+              <a class="read-link" target="_blank" rel="noopener">Read Article</a>
+              <button class="bookmark-btn danger" data-action="remove">❌ Remove</button>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <script src="news.js"></script>
+    <script>
+      // ======= SIDEBAR OVERLAY =======
+      const overlay = document.getElementById("overlay");
+      const overlayContent = document.getElementById("overlay-content");
+      const overlayClose = document.getElementById("overlay-close");
+
+      const pageContent = {
+        about: "<h2>About Us</h2><p>This app shows the latest news in various categories. Users can search and save articles for later reading.</p>",
+        goals: "<h2>Our Goals</h2><p>Our goal is to provide users with real-time news updates and a seamless reading experience.</p>",
+        services: "<h2>Our Services</h2><p>We provide news filtering by categories, search functionality, saving articles, and dark mode for better readability.</p>"
+      };
+
+      document.querySelectorAll(".sidebar ul li a").forEach(link => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const key = link.dataset.content;
+          overlayContent.innerHTML = pageContent[key] || "<p>No content available.</p>";
+          overlay.classList.add("show");
+          overlay.classList.remove("hidden");
+        });
+      });
+
+      overlayClose.addEventListener("click", () => {
+        overlay.classList.remove("show");
+        setTimeout(() => overlay.classList.add("hidden"), 400);
+      });
+    </script>
+  </body>
+</html>
+
+
+
+
